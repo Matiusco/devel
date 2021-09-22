@@ -182,8 +182,16 @@ ASPAS="'"
 BATERIA='['${COR_BATERIA}'$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 |grep percentage | rev | cut -c 1-3 |rev)'${COR_BASE}']'
 DEPOIS="\n${COR_BASE}${DES[1]}"
 CURSOR="${COR_CURSOR} "'\$'" "
+MEM=$(free -h | tr -s ' ' | grep "Mem" | cut -d" " -f4)
 
+MEMORIA='['${COR_BATERIA}${MEM}${COR_BASE}']'
 LOADAVERAGE='['${COR_BATERIA}'$(cat /proc/loadavg | cut -d" " -f1-3)'${COR_BASE}']'
+
+# falta o [uso cpu]
+
+# Com Bateria, com  [uso de memória], com Horário 
+
+#PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${SEPARADOR}${BATERIA}${SEPARADOR}${MEMORIA}${DEPOIS}${CURSOR}${COR[0]}"
 
 # Com Bateria e Loadaverage
 
@@ -193,7 +201,11 @@ LOADAVERAGE='['${COR_BATERIA}'$(cat /proc/loadavg | cut -d" " -f1-3)'${COR_BASE}
 
 #PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${SEPARADOR}${LOADAVERAGE}${DEPOIS}${CURSOR}${COR[0]}"
 
-# Sem Bateria e sem Loadaverage
+# Sem Bateria e sem Loadaverage ,com USO DE MEMORIA e com Horário.
+
+#PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${SEPARADOR}${MEMORIA}${DEPOIS}${CURSOR}${COR[0]}"
+
+# Sem Bateria e sem Loadaverage + Horário
 
 PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${DEPOIS}${CURSOR}${COR[0]}"
 
@@ -201,6 +213,9 @@ PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPA
 
 #PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${DEPOIS}${CURSOR}${COR[0]}"
 
+# Sem Bateria, sem loadaverage sem horário e com USO DE MEMORIA
+
+#PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}${MEMORIA}${DEPOIS}${CURSOR}${COR[0]}"
 
    if [ $# -eq 1 ]
    then
