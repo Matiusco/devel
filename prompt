@@ -187,6 +187,36 @@ MEM=$(free -h | tr -s ' ' | grep "Mem" | cut -d" " -f4)
 MEMORIA='['${COR_BATERIA}${MEM}${COR_BASE}']'
 LOADAVERAGE='['${COR_BATERIA}'$(cat /proc/loadavg | cut -d" " -f1-3)'${COR_BASE}']'
 
+#
+##
+###
+####
+#####
+##################################
+# TEMPORARIAMENTE ################
+# Depois de salvar o PS1 ainda tem que colocar o eval no local da memoria.
+# So assim ele vai atualizar em tempo real. 
+# Vou deixar um exemplo aqui. 
+# Tudo abaixo para colocar no .bashrc
+# junto com a PS1, so para vc ver de exemplo.
+##################################
+m1='free -h | tr -s '
+m2="' ' | grep"
+m3=' "Mem" | cut -d" " -f4'
+
+MEM=${m1}${m2}${m3}
+PS1='\[\e[1;35m\]\342\224\214\342\224\200\[\e[1;35m\][\[\e[1;36m\]\u\[\e[1;33m\]@\[\e[1;34m\]\h\[\e[1;35m\]]\[\e[1;35m\]\342\224\200\[\e[1;35m\][\[\e[1;32m\]\w\[\e[1;35m\]]\[\e[1;35m\]\342\224\200[\[\e[1;37m\]\t\[\e[1;35m\]]\[\e[1;35m\]\342\224\200[\[\e[1;37m\]$(eval $MEM)\[\e[1;35m\]]\n\[\e[1;35m\]\342\224\224\342\224\200\342\224\200\342\225\274\[\e[1;31m\] \$ \[\e[0m\]'
+# No lugar q deveria estar o valor da memoria
+# vc vai encontrar $(eval $MEM)
+# Assim precisa ser outros se quiser o uso de memoria em tempo real.
+# Pelo menos ate acharmos uma saida. 
+##################################
+#####
+###
+##
+#
+
+
 # falta o [uso cpu]
 
 # Com Bateria, com  [uso de memória], com Horário 
