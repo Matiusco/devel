@@ -28,7 +28,6 @@ chk_update=0 # 0=no 1=yes
 update_ps1_selected=0 # 0=no 1=yes
 lista=$1
 
-
 clear 
 
 COR[0]="\[\e[0m\]" # Normal
@@ -45,6 +44,35 @@ DES[0]="\342\224\214\342\224\200" # Linha de canto
 DES[1]="\342\224\224\342\224\200\342\224\200\342\225\274" # Linha e ponto
 DES[2]="\342\234\227" # Sinal de erro
 DES[3]="\342\224\200" # Linha horizontal
+
+#-----------------------------------------------------------------------
+# Fim Global 
+
+# Funções.
+#-----------------------------------------------------------------------
+
+__info_prompt() {
+	local info_uso=$(cat <<EOF
+#----------------------------------------------------------------------#
+ Testado em versões Buster e Sid do Debian. 
+
+ Copie esta PS1 da tela. Cole no final de seu ~/.bashrc 
+
+ Antes de alterar, faça um bckup de seu ~/.bashrc    
+
+ Descomente outras linhas para mudar os recursos para: 
+ Mostrar Bateria, Uso de memória, data e hora, etc...
+  
+#----------------------------------------------------------------------#
+EOF
+)
+	echo "$info_uso"
+}
+
+
+#-----------------------------------------------------------------------
+# Fim das Funções.
+
 
 echo "Escolha entre 1 a 8  "
 echo 
@@ -182,46 +210,17 @@ ASPAS="'"
 BATERIA='['${COR_BATERIA}'$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 |grep percentage | rev | cut -c 1-3 |rev)'${COR_BASE}']'
 DEPOIS="\n${COR_BASE}${DES[1]}"
 CURSOR="${COR_CURSOR} "'\$'" "
-MEM=$(free -h | tr -s ' ' | grep "Mem" | cut -d" " -f4)
 
-MEMORIA='['${COR_BATERIA}${MEM}${COR_BASE}']'
+MEMORIA='['${COR_BATERIA}'$(free -h | tr -s " " | grep "Mem" | cut -d" " -f4)'${COR_BASE}']'
+
 LOADAVERAGE='['${COR_BATERIA}'$(cat /proc/loadavg | cut -d" " -f1-3)'${COR_BASE}']'
-
-#
-##
-###
-####
-#####
-##################################
-# TEMPORARIAMENTE ################
-# Depois de salvar o PS1 ainda tem que colocar o eval no local da memoria.
-# So assim ele vai atualizar em tempo real. 
-# Vou deixar um exemplo aqui. 
-# Tudo abaixo para colocar no .bashrc
-# junto com a PS1, so para vc ver de exemplo.
-##################################
-m1='free -h | tr -s '
-m2="' ' | grep"
-m3=' "Mem" | cut -d" " -f4'
-
-MEM=${m1}${m2}${m3}
-PS1='\[\e[1;35m\]\342\224\214\342\224\200\[\e[1;35m\][\[\e[1;36m\]\u\[\e[1;33m\]@\[\e[1;34m\]\h\[\e[1;35m\]]\[\e[1;35m\]\342\224\200\[\e[1;35m\][\[\e[1;32m\]\w\[\e[1;35m\]]\[\e[1;35m\]\342\224\200[\[\e[1;37m\]\t\[\e[1;35m\]]\[\e[1;35m\]\342\224\200[\[\e[1;37m\]$(eval $MEM)\[\e[1;35m\]]\n\[\e[1;35m\]\342\224\224\342\224\200\342\224\200\342\225\274\[\e[1;31m\] \$ \[\e[0m\]'
-# No lugar q deveria estar o valor da memoria
-# vc vai encontrar $(eval $MEM)
-# Assim precisa ser outros se quiser o uso de memoria em tempo real.
-# Pelo menos ate acharmos uma saida. 
-##################################
-#####
-###
-##
-#
 
 
 # falta o [uso cpu]
 
 # Com Bateria, com  [uso de memória], com Horário 
 
-#PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${SEPARADOR}${BATERIA}${SEPARADOR}${MEMORIA}${DEPOIS}${CURSOR}${COR[0]}"
+PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${SEPARADOR}${BATERIA}${SEPARADOR}${MEMORIA}${DEPOIS}${CURSOR}${COR[0]}"
 
 # Com Bateria e Loadaverage
 
@@ -237,7 +236,7 @@ PS1='\[\e[1;35m\]\342\224\214\342\224\200\[\e[1;35m\][\[\e[1;36m\]\u\[\e[1;33m\]
 
 # Sem Bateria e sem Loadaverage + Horário
 
-PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${DEPOIS}${CURSOR}${COR[0]}"
+#PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPARADOR}${COR_BASE}[${DIR}${COR_BASE}]${SEPARADOR}[${HORARIO}${COR_BASE}]${DEPOIS}${CURSOR}${COR[0]}"
 
 # Sem Bateria, sem loadaverage sem horário
 
@@ -250,22 +249,18 @@ PS1="${ANTES}${ERRO}${COR_BASE}[${USER}${COR_ARROBA}@${SERVER}${COR_BASE}]${SEPA
    if [ $# -eq 1 ]
    then
 	  clear
-      echo
-      echo "Pare ter essa aparência no terminal vai precisar substituir a definição da variável PS1. Salve a sua PS1 antiga colocando #PS1 e cole esta escolhida aqui."
-      echo
-      echo "Normalmente no arquivo ~/.bashrc ou para todos os usuários em /etc/bash.bashrc"
-      echo
-      echo "Testado em versões Buster e Sid do Debian, mas deve funcionar em muitas outras."
+        __info_prompt
       echo
       echo "PS1='$PS1'"
       echo
    fi
-
    printf '%s\n' "${PS1@P}                                $i"
 done
 
-echo 
-echo "$orientacao"
-echo "$exemplo"
-echo
-
+if [ $# -eq 0 ]
+then
+    echo 
+    echo "$orientacao"
+    echo "$exemplo"
+    echo
+fi
